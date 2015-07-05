@@ -194,7 +194,7 @@ __END__
   use Time::Ago;
 
   print Time::Ago->in_words(0), "\n";
-  # 0 seconds ago, prints "less than 1 minute";
+  # 0 seconds ago, prints "less than a minute";
 
   print Time::Ago->in_words(3600 * 4.6), "\n";
   # 16,560 seconds ago, prints "about 5 hours";
