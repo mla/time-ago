@@ -38,7 +38,7 @@ my $call = sub { $CLASS->$method(@_) };
 
 # 0 <-> 29 secs => less than a minute
 foreach (0..29) {
-  is $call->($_), 'less than 1 minute', "$method, $_ seconds";
+  is $call->($_), 'less than a minute', "$method, $_ seconds";
 }
 
 # 0 secs <-> 1 min, 29 secs => 1 minute
@@ -133,9 +133,41 @@ SKIP: {
   skip 'DateTime not installed', 1 if $@;
 
   my $dt = DateTime->from_epoch(epoch => time);
-  is $call->($dt), 'less than 1 minute',
+  is $call->($dt), 'less than a minute',
     'DateTime object converted to epoch seconds';
 }
+
+#######################################################################
+
+# Tests for when include_seconds parameter is supplied
+
+$call = sub { $CLASS->$method(@_, include_seconds => 1) };
+
+foreach (0, 4) {
+  is $call->($_), 'less than 5 seconds', "include_seconds, $_ seconds";
+}
+
+foreach (5, 9) {
+  is $call->($_), 'less than 10 seconds', "include_seconds, $_ seconds";
+}
+
+foreach (10, 19) {
+  is $call->($_), 'less than 20 seconds', "include_seconds, $_ seconds";
+}
+
+foreach (20, 39) {
+  is $call->($_), 'half a minute', "include_seconds, $_ seconds";
+}
+
+foreach (49, 59) {
+  is $call->($_), 'less than a minute', "include_seconds, $_ seconds";
+}
+
+foreach (60, 89) {
+  is $call->($_), '1 minute', "include_seconds, $_ seconds";
+}
+
+#######################################################################
 
 Test::More::done_testing();
 

@@ -9,7 +9,7 @@ use warnings;
 use Carp;
 use Scalar::Util qw/ blessed /;
 
-our $VERSION = '0.05';
+our $VERSION = '0.06';
 
 use constant {
   MINUTES_IN_QUARTER_YEAR        => 131400, # 91.25 days
@@ -61,7 +61,7 @@ sub new {
     half_a_minute => sub { 'half a minute' },
 
     less_than_x_minutes => sub {
-      "less than $_[0]", $pluralize->('minute', $_[0]) 
+      $_[0] == 1 ? 'less than a minute' : "less than $_[0] minutes";
     },
 
     less_than_x_seconds => sub {
