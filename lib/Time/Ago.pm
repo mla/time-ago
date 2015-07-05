@@ -12,7 +12,7 @@ use Carp;
 use Lingua::EN::Inflexion qw/ noun /;
 use Scalar::Util qw/ blessed /;
 
-our $VERSION = '0.01';
+our $VERSION = '0.02';
 
 use constant {
   MINUTES_IN_QUARTER_YEAR        => 131400, # 91.25 days
