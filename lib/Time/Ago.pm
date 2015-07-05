@@ -6,10 +6,7 @@ package Time::Ago;
 
 use strict;
 use warnings;
-use v5.14;
-no  warnings 'experimental::smartmatch';
 use Carp;
-use Lingua::EN::Inflexion qw/ noun /;
 use Scalar::Util qw/ blessed /;
 
 our $VERSION = '0.04';
@@ -37,15 +34,11 @@ sub new {
 
 
 {
-  use Lingua::EN::Inflexion qw/ noun /;
-
-  my %plurals;
   my $pluralize = sub {
     my $singular = shift;
     my $count    = shift;
 
-    return $singular if 1 == $count;
-    $plurals{ $singular } //= do { noun($singular)->plural };
+    return 1 == $count ? $singular : "${singular}s";
   };
 
   my %en = (
@@ -106,8 +99,8 @@ sub new {
 
     return $en_locale unless blessed $self;
 
-    $self->{locale} = shift // $en_locale if @_;
-    return $self->{locale} // $en_locale;
+    $self->{locale} = shift || $en_locale if @_;
+    return $self->{locale} || $en_locale;
   }
 }
 
@@ -127,81 +120,66 @@ sub in_words {
 
   my $round = sub { int($_[0] + 0.5) };
 
-  $duration   = abs $duration;
-  my $minutes = $round->($duration / 60);
-  my $seconds = $round->($duration);
+  $duration = abs $duration;
+  my $mins = $round->($duration / 60);
+  my $secs = $round->($duration);
 
   my $locale = $args{locale} || $self->locale;
 
-  foreach ($minutes) {
-    when ([0..1]) {
-      unless ($args{include_seconds}) {
-        return $minutes == 0 ?
-          $locale->('less_than_x_minutes', count => 1) :
-          $locale->('x_minutes', count => $minutes)
-        ;
-      }
-
-      foreach ($seconds) {
-        return $locale->('less_than_x_seconds', count => 5)  when ([0..4]);
-        return $locale->('less_than_x_seconds', count => 10) when ([5..9]);
-        return $locale->('less_than_x_seconds', count => 20) when ([10..19]);
-        return $locale->('half_a_minute', count => 20)       when ([20..39]);
-        return $locale->('less_than_x_minutes', count => 1)  when ([40..59]);
-        return $locale->('x_minutes', count => 1);
-      }
+  if ($mins <= 1) {
+    unless ($args{include_seconds}) {
+      return $mins == 0 ?
+        $locale->('less_than_x_minutes', count => 1) :
+        $locale->('x_minutes', count => $mins)
+      ;
     }
 
-    when ([2..44]) {
-      return $locale->('x_minutes', count => $minutes);
-    }
-
-    when ([45..89]) {
-      return $locale->('about_x_hours', count => 1);
-    }
-
-    # 90 mins up to 24 hours
-    when ([90..1439]) {
-      return $locale->('about_x_hours', count => $round->($minutes/60.0));
-    }
-
-    # 24 hours up to 42 hours
-    when ([1440..2519]) {
-      return $locale->('x_days', count => 1);
-    }
-
-    # 42 hours up to 30 days
-    when ([2520..43199]) {
-      return $locale->('x_days', count => $round->($minutes / 1440));
-    }
-
-    # 30 days up to 60 days
-    when ([43200..86399]) {
-      return $locale->('about_x_months', count => $round->($minutes / 43200));
-    }
-
-    # 60 days up to 365 days
-    when ([86400..525600]) {
-      return $locale->('x_months', count => $round->($minutes / 43200));
-    }
-
-    default {
-      # XXX does not implement leap year stuff that Rails implementation has
-
-      my $remainder = $minutes % MINUTES_IN_YEAR;
-      my $years = int($minutes / MINUTES_IN_YEAR);
-
-      if ($remainder < MINUTES_IN_QUARTER_YEAR) {
-        return $locale->('about_x_years', count => $years);
-      }
-
-      if ($remainder < MINUTES_IN_THREE_QUARTERS_YEAR) {
-        return $locale->('over_x_years', count => $years);
-      }
-   
-      return $locale->('almost_x_years', count => $years + 1); 
-    }
+    return $locale->('less_than_x_seconds', count => 5)  if $secs <= 4;
+    return $locale->('less_than_x_seconds', count => 10) if $secs <= 9;
+    return $locale->('less_than_x_seconds', count => 20) if $secs <= 19;
+    return $locale->('half_a_minute', count => 20)       if $secs <= 39;
+    return $locale->('less_than_x_minutes', count => 1)  if $secs <= 59;
+    return $locale->('x_minutes', count => 1);
   }
+
+  return $locale->('x_minutes', count => $mins) if $mins <= 44;
+  return $locale->('about_x_hours', count => 1) if $mins <= 89;
+
+  # 90 mins up to 24 hours
+  if ($mins <= 1439) {
+    return $locale->('about_x_hours', count => $round->($mins/60.0));
+  }
+
+  # 24 hours up to 42 hours
+  return $locale->('x_days', count => 1) if $mins <= 2519;
+
+  # 42 hours up to 30 days
+  return $locale->('x_days', count => $round->($mins / 1440)) if $mins <= 43199;
+
+  # 30 days up to 60 days
+  if ($mins <= 86399) {
+    return $locale->('about_x_months', count => $round->($mins / 43200));
+  }
+
+  # 60 days up to 365 days
+  if ($mins <= 525600) {
+    return $locale->('x_months', count => $round->($mins / 43200));
+  }
+
+  # XXX does not implement leap year stuff that Rails implementation has
+
+  my $remainder = $mins % MINUTES_IN_YEAR;
+  my $years     = int($mins / MINUTES_IN_YEAR);
+
+  if ($remainder < MINUTES_IN_QUARTER_YEAR) {
+    return $locale->('about_x_years', count => $years);
+  }
+
+  if ($remainder < MINUTES_IN_THREE_QUARTERS_YEAR) {
+    return $locale->('over_x_years', count => $years);
+  }
+  
+  return $locale->('almost_x_years', count => $years + 1); 
 }
 
 
