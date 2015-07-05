@@ -1,5 +1,5 @@
 package MLA::Time::InWords;
-# ABSTRACT: Approximate time distance, in words
+# ABSTRACT: Convert duration in seconds, to appromiximate time in words
 
 # Port of Rails distance_of_time_in_words and time_ago_in_words
 # http://apidock.com/rails/v4.2.1/ActionView/Helpers/DateHelper/distance_of_time_in_words
