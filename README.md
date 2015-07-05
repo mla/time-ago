@@ -1,10 +1,10 @@
 # NAME
 
-Time::Ago - Approximate duration in words
+Time::Ago
 
 # VERSION
 
-version 0.01
+version 0.02
 
 # SYNOPSIS
 
