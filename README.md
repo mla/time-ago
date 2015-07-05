@@ -2,6 +2,10 @@
 
 Time::Ago - Approximate duration in words
 
+# VERSION
+
+version 0.04
+
 # SYNOPSIS
 
     use Time::Ago;
@@ -11,7 +15,6 @@ Time::Ago - Approximate duration in words
 
     print Time::Ago->in_words(3600 * 4.6), "\n";
     # 16,560 seconds ago, prints "about 5 hours";
-    
 
 # DESCRIPTION
 
@@ -103,3 +106,14 @@ Github repository [https://github.com/mla/time-ago](https://github.com/mla/time-
 # LICENSE
 
 This library is free software; you can redistribute it and/or modify it under the same terms as Perl itself.
+
+# AUTHOR
+
+Maurice Aubrey <maurice.aubrey@gmail.com>
+
+# COPYRIGHT AND LICENSE
+
+This software is copyright (c) 2015 by Maurice Aubrey.
+
+This is free software; you can redistribute it and/or modify it under
+the same terms as the Perl 5 programming language system itself.

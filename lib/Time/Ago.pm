@@ -1,4 +1,5 @@
 package Time::Ago;
+# ABSTRACT: Approximate duration in words
 
 # Port of Rails distance_of_time_in_words and time_ago_in_words
 # http://apidock.com/rails/v4.2.1/ActionView/Helpers/DateHelper/distance_of_time_in_words
@@ -118,13 +119,13 @@ sub in_words {
   defined $args{duration} or croak 'no duration supplied';
   my $duration = $args{duration}; 
 
-  my $round = sub { int($_[0] + 0.5) };
-
   if (blessed $duration) {
     if ($duration->can('epoch')) {
       $duration = time - $duration->epoch;
     }
   }
+
+  my $round = sub { int($_[0] + 0.5) };
 
   $duration   = abs $duration;
   my $minutes = $round->($duration / 60);
@@ -209,10 +210,6 @@ sub in_words {
 __END__
 
 =pod
-
-=head1 NAME
-
-Time::Ago - Approximate duration in words
 
 =head1 SYNOPSIS
 
