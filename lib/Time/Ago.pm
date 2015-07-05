@@ -1,5 +1,5 @@
-package MLA::Time::InWords;
-# ABSTRACT: Approximate time distance, in words
+package Time::Ago;
+# ABSTRACT: Approximate duration in words
 
 # Port of Rails distance_of_time_in_words and time_ago_in_words
 # http://apidock.com/rails/v4.2.1/ActionView/Helpers/DateHelper/distance_of_time_in_words
@@ -39,9 +39,13 @@ sub new {
 {
   use Lingua::EN::Inflexion qw/ noun /;
 
+  my %plurals;
   my $pluralize = sub {
-    my $word = noun($_[0]);
-    return $_[1] == 1 ? $word->singular : $word->plural;
+    my $singular = shift;
+    my $count    = shift;
+
+    return $singular if 1 == $count;
+    $plurals{ $singular } //= do { noun($singular)->plural };
   };
 
   my %en = (
@@ -108,34 +112,26 @@ sub new {
 }
 
 
-sub distance_of_time_in_words {
+sub in_words {
   my $self = shift;
-  my %args = (@_ % 2 ? (from_time => @_) : @_);
+  my %args = (@_ % 2 ? (duration => @_) : @_);
 
-  defined $args{from_time} or croak 'no from_time supplied';
-  $args{to_time} //= 0;
-
-  my $from_time = abs $args{from_time};
-  my $to_time = abs $args{to_time};
-
-  # If either is an object, try to convert to epoch seconds
-  foreach ($from_time, $to_time) {
-    next unless blessed $_;
-
-    if ($_->can('epoch')) {
-      $_ = $_->epoch;
-    }
-  }
-
-  ($from_time, $to_time) = ($to_time, $from_time) if $from_time > $to_time;
+  defined $args{duration} or croak 'no duration supplied';
+  my $duration = $args{duration}; 
 
   my $round = sub { int($_[0] + 0.5) };
 
-  my $diff = $to_time - $from_time;
-  my $minutes = $round->($diff / 60);
-  my $seconds = $round->($diff);
+  if (blessed $duration) {
+    if ($duration->can('epoch')) {
+      $duration = time - $duration->epoch;
+    }
+  }
 
-  my $locale = $self->locale;
+  $duration   = abs $duration;
+  my $minutes = $round->($duration / 60);
+  my $seconds = $round->($duration);
+
+  my $locale = $args{locale} || $self->locale;
 
   foreach ($minutes) {
     when ([0..1]) {
@@ -209,35 +205,32 @@ sub distance_of_time_in_words {
 }
 
 
-sub time_ago_in_words {
-  my $self = shift;
-
-  $self->distance_of_time_in_words(@_, to_time => 0);
-}
-
 1;
 
 __END__
 
 =pod
 
+=head1 NAME
+
+Time::Ago - Approximate duration in words
+
 =head1 SYNOPSIS
 
-  use MLA::Time::InWords;
+  use Time::Ago;
 
-  print MLA::Time::InWords->time_ago_in_words(0), "\n";
+  print Time::Ago->in_words(0), "\n";
   # 0 seconds ago, prints "less than 1 minute";
 
-  print MLA::Time::InWords->time_ago_in_words(3600 * 4.6), "\n";
+  print Time::Ago->in_words(3600 * 4.6), "\n";
   # 16,560 seconds ago, prints "about 5 hours";
-
+  
 =head1 DESCRIPTION
 
-This a Perl port of the time_ago_in_words() method from Rails.
+This a Perl port of the time_ago_in_words() helper from Rails.
+Given a duration, in seconds, it returns a readable approximation.
 
-Given a duration, in seconds, it returns the approximate duration in words.
-
-From the Rail's docs:
+From Rails' docs:
 
   0 <-> 29 secs
     less than a minute
@@ -285,47 +278,46 @@ From the Rail's docs:
 
 =over 4
 
-=item new
+=item in_words 
 
-  MLA::Time::InWords->new(%options);
+  Time::Ago->in_words(30); # returns "1 minute"
+  Time::Ago->in_words(60 * 60 * 24 * 365 * 10); # returns "about 10 years"
 
-Creates a new MLA::Time::InWords object.
+Given a duration, in seconds, returns a readable approximation in words.
 
-=item distance_of_time_in_words 
-
-  MLA::Time::InWords->distance_of_time_in_words(
-    from_time => time - 60,
-    to_time => time,
-    %options,
-  );
-
-Returns the duration in seconds, to_time - from_time, as words.
-
-=item time_ago_in_words
-
-  MLA::Time::InWords->time_ago_in_words(
-    from_time => time - 60,
-    %options,
-  );
-
-Same as distince_of_time_in_words except the current time is used 
-as the to_time value.
+As a convenience, if the duration is an object with an epoch() interface
+(as provided by Time::Piece or DateTime), the duration is computed as the
+current time minus the object's epoch() seconds.
 
 =back
 
 =head1 BUGS
 
-There is some basic locale support but currently only
-English is supported. Should be changed to use a real locale package, but not
-sure what the best Perl module is for that currently.
+There is some rudimentary locale support but currently only English is
+implemented. It should be changed to use a real locale package, but not
+sure what a good Perl module is for that currently.
+
+The rails' implementation includes logic for leap years depending on the
+parameters supplied. We have no equivalent support although it would be
+simple to add if anyone cares.
 
 =head1 CREDITS
 
-Ruby on Rails
+Ruby on Rails DateHelper
 L<http://apidock.com/rails/v4.2.1/ActionView/Helpers/DateHelper/distance_of_time_in_words>
 
 =head1 AUTHOR
 
 Maurice Aubrey
+
+=head1 SEE ALSO
+
+Github repository L<https://github.com/mla/time-ago>
+
+L<Time::Duration>
+
+=head1 LICENSE
+
+This library is free software; you can redistribute it and/or modify it under the same terms as Perl itself.
 
 =cut 
