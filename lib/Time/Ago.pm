@@ -1,5 +1,5 @@
 package Time::Ago;
-# ABSTRACT: Approximate duration in words
+# Abstract: Approximate duration in words
 
 # Port of Rails distance_of_time_in_words and time_ago_in_words
 # http://apidock.com/rails/v4.2.1/ActionView/Helpers/DateHelper/distance_of_time_in_words
@@ -12,7 +12,7 @@ use Carp;
 use Lingua::EN::Inflexion qw/ noun /;
 use Scalar::Util qw/ blessed /;
 
-our $VERSION = '0.02';
+our $VERSION = '0.03';
 
 use constant {
   MINUTES_IN_QUARTER_YEAR        => 131400, # 91.25 days
