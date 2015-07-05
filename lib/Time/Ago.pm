@@ -9,7 +9,7 @@ use warnings;
 use Carp;
 use Scalar::Util qw/ blessed /;
 
-our $VERSION = '0.04';
+our $VERSION = '0.05';
 
 use constant {
   MINUTES_IN_QUARTER_YEAR        => 131400, # 91.25 days
