@@ -312,7 +312,7 @@ Returns the duration in seconds, to_time - from_time, as words.
     %options,
   );
 
-Same as distince_of_time_in_words except the current time is used 
+Same as distance_of_time_in_words except the current time is used 
 as the to_time value.
 
 =back
