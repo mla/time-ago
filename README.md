@@ -1,3 +1,11 @@
+# NAME
+
+MLA::Time::InWords - Convert duration in seconds to approximate time in words
+
+# VERSION
+
+version 0.01
+
 # SYNOPSIS
 
     use MLA::Time::InWords;
@@ -14,7 +22,7 @@ This a Perl port of the time\_ago\_in\_words() method from Rails.
 
 Given a duration, in seconds, it returns the approximate duration in words.
 
-From the Rail's docs:
+From Rails' docs:
 
     0 <-> 29 secs
       less than a minute
@@ -58,6 +66,10 @@ From the Rail's docs:
     2 yrs <-> max time or date
       (same rules as 1 yr)
 
+# NAME
+
+MLA::Time::InWords - Convert duration in seconds to approximate time in words
+
 # METHODS
 
 - new
@@ -83,7 +95,7 @@ From the Rail's docs:
           %options,
         );
 
-    Same as distince\_of\_time\_in\_words except the current time is used 
+    Same as distance\_of\_time\_in\_words except the current time is used 
     as the to\_time value.
 
 # BUGS
@@ -100,3 +112,24 @@ Ruby on Rails
 # AUTHOR
 
 Maurice Aubrey
+
+# SEE ALSO
+
+Github repository [https://github.com/mla/mla-time-inwords](https://github.com/mla/mla-time-inwords)
+
+[Time::Duration](https://metacpan.org/pod/Time::Duration)
+
+# LICENSE
+
+This library is free software; you can redistribute it and/or modify it under the same terms as Perl itself.
+
+# AUTHOR
+
+Maurice Aubrey <maurice.aubrey@gmail.com>
+
+# COPYRIGHT AND LICENSE
+
+This software is copyright (c) 2015 by Maurice Aubrey.
+
+This is free software; you can redistribute it and/or modify it under
+the same terms as the Perl 5 programming language system itself.
