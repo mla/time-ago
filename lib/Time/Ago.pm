@@ -226,8 +226,8 @@ Time::Ago - Approximate duration in words
   
 =head1 DESCRIPTION
 
-This a Perl port of the time_ago_in_words() helper from Rails.
 Given a duration, in seconds, it returns a readable approximation.
+This a Perl port of the time_ago_in_words() helper from Rails.
 
 From Rails' docs:
 
