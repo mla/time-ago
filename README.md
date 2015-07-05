@@ -1,10 +1,10 @@
 # NAME
 
-Time::Ago - Approximate duration in words
+Time::Ago
 
 # VERSION
 
-version 0.02
+version 0.04
 
 # SYNOPSIS
 
@@ -64,6 +64,10 @@ From Rails' docs:
 
     2 yrs <-> max time or date
       (same rules as 1 yr)
+
+# NAME
+
+Time::Ago - Approximate duration in words
 
 # METHODS
 
