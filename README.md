@@ -93,19 +93,11 @@ simple to add if anyone cares.
 Ruby on Rails DateHelper
 [http://apidock.com/rails/v4.2.1/ActionView/Helpers/DateHelper/distance\_of\_time\_in\_words](http://apidock.com/rails/v4.2.1/ActionView/Helpers/DateHelper/distance_of_time_in_words)
 
-# AUTHOR
-
-Maurice Aubrey
-
 # SEE ALSO
 
 Github repository [https://github.com/mla/time-ago](https://github.com/mla/time-ago)
 
 [Time::Duration](https://metacpan.org/pod/Time::Duration)
-
-# LICENSE
-
-This library is free software; you can redistribute it and/or modify it under the same terms as Perl itself.
 
 # AUTHOR
 
