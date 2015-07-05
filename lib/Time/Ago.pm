@@ -302,18 +302,10 @@ simple to add if anyone cares.
 Ruby on Rails DateHelper
 L<http://apidock.com/rails/v4.2.1/ActionView/Helpers/DateHelper/distance_of_time_in_words>
 
-=head1 AUTHOR
-
-Maurice Aubrey
-
 =head1 SEE ALSO
 
 Github repository L<https://github.com/mla/time-ago>
 
 L<Time::Duration>
-
-=head1 LICENSE
-
-This library is free software; you can redistribute it and/or modify it under the same terms as Perl itself.
 
 =cut 
