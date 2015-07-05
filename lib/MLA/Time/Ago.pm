@@ -110,32 +110,17 @@ sub new {
 
 sub in_words {
   my $self = shift;
-  my %args = (@_ % 2 ? (from_time => @_) : @_);
+  my %args = (@_ % 2 ? (duration => @_) : @_);
 
-  defined $args{from_time} or croak 'no from_time supplied';
-  $args{to_time} //= 0;
-
-  my $from_time = abs $args{from_time};
-  my $to_time = abs $args{to_time};
-
-  # If either is an object, try to convert to epoch seconds
-  foreach ($from_time, $to_time) {
-    next unless blessed $_;
-
-    if ($_->can('epoch')) {
-      $_ = $_->epoch;
-    }
-  }
-
-  ($from_time, $to_time) = ($to_time, $from_time) if $from_time > $to_time;
+  defined $args{duration} or croak 'no duration supplied';
 
   my $round = sub { int($_[0] + 0.5) };
 
-  my $diff = $to_time - $from_time;
-  my $minutes = $round->($diff / 60);
-  my $seconds = $round->($diff);
+  my $duration = abs $args{duration}; 
+  my $minutes = $round->($duration / 60);
+  my $seconds = $round->($duration);
 
-  my $locale = $self->locale;
+  my $locale = $args{locale} || $self->locale;
 
   foreach ($minutes) {
     when ([0..1]) {
@@ -223,17 +208,16 @@ MLA::Time::Ago - Convert duration in seconds to approximate time in words
 
   use MLA::Time::Ago;
 
-  print MLA::Time::Ago->time_ago_in_words(0), "\n";
+  print MLA::Time::Ago->in_words(0), "\n";
   # 0 seconds ago, prints "less than 1 minute";
 
-  print MLA::Time::Ago->time_ago_in_words(3600 * 4.6), "\n";
+  print MLA::Time::Ago->in_words(3600 * 4.6), "\n";
   # 16,560 seconds ago, prints "about 5 hours";
-
+  
 =head1 DESCRIPTION
 
-This a Perl port of the time_ago_in_words() method from Rails.
-
-Given a duration, in seconds, it returns the approximate duration in words.
+This a Perl port of the time_ago_in_words() helper from Rails.
+Given a duration, in seconds, it returns a readable approximation.
 
 From Rails' docs:
 
@@ -283,39 +267,20 @@ From Rails' docs:
 
 =over 4
 
-=item new
+=item in_words 
 
-  MLA::Time::Ago->new(%options);
+  MLA::Time::Ago->in_words(30); # 1 minute
+  MLA::Time::Ago->in_words(60 * 60 * 24 * 365 * 10); # about 10 years
 
-Creates a new MLA::Time::Ago object.
-
-=item distance_of_time_in_words 
-
-  MLA::Time::Ago->distance_of_time_in_words(
-    from_time => time - 60,
-    to_time => time,
-    %options,
-  );
-
-Returns the duration in seconds, to_time - from_time, as words.
-
-=item time_ago_in_words
-
-  MLA::Time::Ago->time_ago_in_words(
-    from_time => time - 60,
-    %options,
-  );
-
-Same as distance_of_time_in_words except the current time is used 
-as the to_time value.
+Given a duration, in seconds, returns a readable approximation in words.
 
 =back
 
 =head1 BUGS
 
-There is some basic locale support but currently only
-English is supported. Should be changed to use a real locale package, but not
-sure what the best Perl module is for that currently.
+There is some basic locale support but currently only English is implemented.
+Should be changed to use a real locale package, but not sure what the best
+Perl module is for that currently.
 
 =head1 CREDITS
 
