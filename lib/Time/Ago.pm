@@ -61,7 +61,7 @@ sub new {
     half_a_minute => sub { 'half a minute' },
 
     less_than_x_minutes => sub {
-      "less than $_[0]", $pluralize->('minute', $_[0]) 
+      $_[0] == 1 ? 'less than a minute' : "less than $_[0] minutes";
     },
 
     less_than_x_seconds => sub {
