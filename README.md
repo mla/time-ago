@@ -1,6 +1,6 @@
 # NAME
 
-Time::Ago
+Time::Ago - Approximate duration in words
 
 # VERSION
 
