@@ -1,10 +1,6 @@
 # NAME
 
-Time::Ago
-
-# VERSION
-
-version 0.04
+Time::Ago - Approximate duration in words
 
 # SYNOPSIS
 
@@ -15,11 +11,12 @@ version 0.04
 
     print Time::Ago->in_words(3600 * 4.6), "\n";
     # 16,560 seconds ago, prints "about 5 hours";
+    
 
 # DESCRIPTION
 
+Given a duration, in seconds, returns a readable approximation.
 This a Perl port of the time\_ago\_in\_words() helper from Rails.
-Given a duration, in seconds, it returns a readable approximation.
 
 From Rails' docs:
 
@@ -65,10 +62,6 @@ From Rails' docs:
     2 yrs <-> max time or date
       (same rules as 1 yr)
 
-# NAME
-
-Time::Ago - Approximate duration in words
-
 # METHODS
 
 - in\_words 
@@ -79,7 +72,7 @@ Time::Ago - Approximate duration in words
     Given a duration, in seconds, returns a readable approximation in words.
 
     As a convenience, if the duration is an object with an epoch() interface
-    (as provided by Time::Piece or DateTime), the duration is computed as the
+    (as provided by Time::Piece or DateTime), the duration is set as the
     current time minus the object's epoch() seconds.
 
 # BUGS
@@ -110,14 +103,3 @@ Github repository [https://github.com/mla/time-ago](https://github.com/mla/time-
 # LICENSE
 
 This library is free software; you can redistribute it and/or modify it under the same terms as Perl itself.
-
-# AUTHOR
-
-Maurice Aubrey <maurice.aubrey@gmail.com>
-
-# COPYRIGHT AND LICENSE
-
-This software is copyright (c) 2015 by Maurice Aubrey.
-
-This is free software; you can redistribute it and/or modify it under
-the same terms as the Perl 5 programming language system itself.
