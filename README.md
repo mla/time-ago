@@ -74,7 +74,7 @@ Time::Ago - Approximate duration in words
 - in\_words 
 
         Time::Ago->in_words(30); # returns "1 minute"
-        Time::Ago->in_words(60 * 60 * 24 * 365 * 10); # returns "about 10 years"
+        Time::Ago->in_words(3600 * 24 * 365 * 10); # returns "about 10 years"
 
     Given a duration, in seconds, returns a readable approximation in words.
 

@@ -12,7 +12,7 @@ use Carp;
 use Lingua::EN::Inflexion qw/ noun /;
 use Scalar::Util qw/ blessed /;
 
-our $VERSION = '0.01';
+our $VERSION = '0.02';
 
 use constant {
   MINUTES_IN_QUARTER_YEAR        => 131400, # 91.25 days
@@ -281,7 +281,7 @@ From Rails' docs:
 =item in_words 
 
   Time::Ago->in_words(30); # returns "1 minute"
-  Time::Ago->in_words(60 * 60 * 24 * 365 * 10); # returns "about 10 years"
+  Time::Ago->in_words(3600 * 24 * 365 * 10); # returns "about 10 years"
 
 Given a duration, in seconds, returns a readable approximation in words.
 
