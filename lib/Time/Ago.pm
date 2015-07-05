@@ -1,5 +1,5 @@
-package MLA::Time::Ago;
-# ABSTRACT: Convert duration in seconds to approximate time in words
+package Time::Ago;
+# ABSTRACT: Approximate duration in words
 
 # Port of Rails distance_of_time_in_words and time_ago_in_words
 # http://apidock.com/rails/v4.2.1/ActionView/Helpers/DateHelper/distance_of_time_in_words
@@ -39,9 +39,13 @@ sub new {
 {
   use Lingua::EN::Inflexion qw/ noun /;
 
+  my %plurals;
   my $pluralize = sub {
-    my $word = noun($_[0]);
-    return $_[1] == 1 ? $word->singular : $word->plural;
+    my $singular = shift;
+    my $count    = shift;
+
+    return $singular if 1 == $count;
+    $plurals{ $singular } //= do { noun($singular)->plural };
   };
 
   my %en = (
@@ -113,10 +117,17 @@ sub in_words {
   my %args = (@_ % 2 ? (duration => @_) : @_);
 
   defined $args{duration} or croak 'no duration supplied';
+  my $duration = $args{duration}; 
 
   my $round = sub { int($_[0] + 0.5) };
 
-  my $duration = abs $args{duration}; 
+  if (blessed $duration) {
+    if ($duration->can('epoch')) {
+      $duration = time - $duration->epoch;
+    }
+  }
+
+  $duration   = abs $duration;
   my $minutes = $round->($duration / 60);
   my $seconds = $round->($duration);
 
@@ -202,16 +213,16 @@ __END__
 
 =head1 NAME
 
-MLA::Time::Ago - Convert duration in seconds to approximate time in words
+Time::Ago - Approximate duration in words
 
 =head1 SYNOPSIS
 
-  use MLA::Time::Ago;
+  use Time::Ago;
 
-  print MLA::Time::Ago->in_words(0), "\n";
+  print Time::Ago->in_words(0), "\n";
   # 0 seconds ago, prints "less than 1 minute";
 
-  print MLA::Time::Ago->in_words(3600 * 4.6), "\n";
+  print Time::Ago->in_words(3600 * 4.6), "\n";
   # 16,560 seconds ago, prints "about 5 hours";
   
 =head1 DESCRIPTION
@@ -269,22 +280,30 @@ From Rails' docs:
 
 =item in_words 
 
-  MLA::Time::Ago->in_words(30); # 1 minute
-  MLA::Time::Ago->in_words(60 * 60 * 24 * 365 * 10); # about 10 years
+  Time::Ago->in_words(30); # returns "1 minute"
+  Time::Ago->in_words(60 * 60 * 24 * 365 * 10); # returns "about 10 years"
 
 Given a duration, in seconds, returns a readable approximation in words.
+
+As a convenience, if the duration is an object with an epoch() interface
+(as provided by Time::Piece or DateTime), the duration is computed as the
+current time minus the object's epoch() seconds.
 
 =back
 
 =head1 BUGS
 
-There is some basic locale support but currently only English is implemented.
-Should be changed to use a real locale package, but not sure what the best
-Perl module is for that currently.
+There is some rudimentary locale support but currently only English is
+implemented. It should be changed to use a real locale package, but not
+sure what a good Perl module is for that currently.
+
+The rails' implementation includes logic for leap years depending on the
+parameters supplied. We have no equivalent support although it would be
+simple to add if anyone cares.
 
 =head1 CREDITS
 
-Ruby on Rails
+Ruby on Rails DateHelper
 L<http://apidock.com/rails/v4.2.1/ActionView/Helpers/DateHelper/distance_of_time_in_words>
 
 =head1 AUTHOR
@@ -293,7 +312,7 @@ Maurice Aubrey
 
 =head1 SEE ALSO
 
-Github repository L<https://github.com/mla/mla-time-ago>
+Github repository L<https://github.com/mla/time-ago>
 
 L<Time::Duration>
 

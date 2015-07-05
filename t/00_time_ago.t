@@ -4,7 +4,7 @@ use strict;
 use warnings;
 use Test::More;
 
-my $CLASS = 'MLA::Time::Ago';
+my $CLASS = 'Time::Ago';
 
 use_ok $CLASS;
 
@@ -126,8 +126,17 @@ foreach ($two_years + ($quarter * 3), 3 * $year - 60) {
   is $call->($_), "almost 3 years", "$method, $_ seconds";
 }
 
+#######################################################################
+
+SKIP: {
+  eval { require DateTime };
+  skip 'DateTime not installed', 1 if $@;
+
+  my $dt = DateTime->from_epoch(epoch => time);
+  is $call->($dt), 'less than 1 minute',
+    'DateTime object converted to epoch seconds';
+}
 
 Test::More::done_testing();
 
 1;
-
