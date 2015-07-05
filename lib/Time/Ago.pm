@@ -285,7 +285,7 @@ From Rails' docs:
 Given a duration, in seconds, returns a readable approximation in words.
 
 As a convenience, if the duration is an object with an epoch() interface
-(as provided by Time::Piece or DateTime), the duration is computed as the
+(as provided by Time::Piece or DateTime), the duration is set as the
 current time minus the object's epoch() seconds.
 
 =back
