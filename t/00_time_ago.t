@@ -4,7 +4,7 @@ use strict;
 use warnings;
 use Test::More;
 
-my $CLASS = 'MLA::Time::InWords';
+my $CLASS = 'MLA::Time::Ago';
 
 use_ok $CLASS;
 
@@ -33,7 +33,7 @@ my $to_days   = sub { $round->( $to_mins->($_) / 1440 )   };
 my $to_months = sub { $round->( $to_mins->($_) / 43200 )  };
 
 
-my $method = 'distance_of_time_in_words';
+my $method = 'in_words';
 my $call = sub { $CLASS->$method(@_) };
 
 # 0 <-> 29 secs => less than a minute
@@ -126,13 +126,6 @@ foreach ($two_years + ($quarter * 3), 3 * $year - 60) {
   is $call->($_), "almost 3 years", "$method, $_ seconds";
 }
 
-
-#######################################################################
-
-$method = 'time_ago_in_words';
-$call = sub { $CLASS->$method(@_) };
-
-is $call->(0), 'less than 1 minute', "$method, 0 seconds";
 
 Test::More::done_testing();
 

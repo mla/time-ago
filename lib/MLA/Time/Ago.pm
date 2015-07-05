@@ -1,4 +1,4 @@
-package MLA::Time::InWords;
+package MLA::Time::Ago;
 # ABSTRACT: Convert duration in seconds to approximate time in words
 
 # Port of Rails distance_of_time_in_words and time_ago_in_words
@@ -108,7 +108,7 @@ sub new {
 }
 
 
-sub distance_of_time_in_words {
+sub in_words {
   my $self = shift;
   my %args = (@_ % 2 ? (from_time => @_) : @_);
 
@@ -209,12 +209,6 @@ sub distance_of_time_in_words {
 }
 
 
-sub time_ago_in_words {
-  my $self = shift;
-
-  $self->distance_of_time_in_words(@_, to_time => 0);
-}
-
 1;
 
 __END__
@@ -223,16 +217,16 @@ __END__
 
 =head1 NAME
 
-MLA::Time::InWords - Convert duration in seconds to approximate time in words
+MLA::Time::Ago - Convert duration in seconds to approximate time in words
 
 =head1 SYNOPSIS
 
-  use MLA::Time::InWords;
+  use MLA::Time::Ago;
 
-  print MLA::Time::InWords->time_ago_in_words(0), "\n";
+  print MLA::Time::Ago->time_ago_in_words(0), "\n";
   # 0 seconds ago, prints "less than 1 minute";
 
-  print MLA::Time::InWords->time_ago_in_words(3600 * 4.6), "\n";
+  print MLA::Time::Ago->time_ago_in_words(3600 * 4.6), "\n";
   # 16,560 seconds ago, prints "about 5 hours";
 
 =head1 DESCRIPTION
@@ -291,13 +285,13 @@ From Rails' docs:
 
 =item new
 
-  MLA::Time::InWords->new(%options);
+  MLA::Time::Ago->new(%options);
 
-Creates a new MLA::Time::InWords object.
+Creates a new MLA::Time::Ago object.
 
 =item distance_of_time_in_words 
 
-  MLA::Time::InWords->distance_of_time_in_words(
+  MLA::Time::Ago->distance_of_time_in_words(
     from_time => time - 60,
     to_time => time,
     %options,
@@ -307,7 +301,7 @@ Returns the duration in seconds, to_time - from_time, as words.
 
 =item time_ago_in_words
 
-  MLA::Time::InWords->time_ago_in_words(
+  MLA::Time::Ago->time_ago_in_words(
     from_time => time - 60,
     %options,
   );
@@ -334,7 +328,7 @@ Maurice Aubrey
 
 =head1 SEE ALSO
 
-Github repository L<https://github.com/mla/mla-time-inwords>
+Github repository L<https://github.com/mla/mla-time-ago>
 
 L<Time::Duration>
 
