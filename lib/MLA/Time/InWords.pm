@@ -1,5 +1,5 @@
 package MLA::Time::InWords;
-# ABSTRACT: Convert duration in seconds, to appromiximate time in words
+# ABSTRACT: Convert duration in seconds to approximate time in words
 
 # Port of Rails distance_of_time_in_words and time_ago_in_words
 # http://apidock.com/rails/v4.2.1/ActionView/Helpers/DateHelper/distance_of_time_in_words
@@ -221,6 +221,10 @@ __END__
 
 =pod
 
+=head1 NAME
+
+MLA::Time::InWords - Convert duration in seconds to approximate time in words
+
 =head1 SYNOPSIS
 
   use MLA::Time::InWords;
@@ -237,7 +241,7 @@ This a Perl port of the time_ago_in_words() method from Rails.
 
 Given a duration, in seconds, it returns the approximate duration in words.
 
-From the Rail's docs:
+From Rails' docs:
 
   0 <-> 29 secs
     less than a minute
@@ -327,5 +331,15 @@ L<http://apidock.com/rails/v4.2.1/ActionView/Helpers/DateHelper/distance_of_time
 =head1 AUTHOR
 
 Maurice Aubrey
+
+=head1 SEE ALSO
+
+Github repository L<https://github.com/mla/mla-time-inwords>
+
+L<Time::Duration>
+
+=head1 LICENSE
+
+This library is free software; you can redistribute it and/or modify it under the same terms as Perl itself.
 
 =cut 
