@@ -7,6 +7,7 @@ package Time::Ago;
 use strict;
 use warnings;
 use Carp;
+use Locale::TextDomain;
 use Scalar::Util qw/ blessed /;
 
 our $VERSION = '0.06';
@@ -34,73 +35,67 @@ sub new {
 
 
 {
-  my $pluralize = sub {
-    my $singular = shift;
-    my $count    = shift;
+  # Just a wrapper around __nx to simplify calls
+  my $nx = sub {
+    my ($singular, $plural, %args) = @_;
 
-    return 1 == $count ? $singular : "${singular}s";
+    __nx($singular, $plural, $args{count}, %args);
   };
 
-  my %en = (
+  my %locale = (
     about_x_hours => sub {
-      "about $_[0]", $pluralize->('hour', $_[0])
+      $nx->('about {count} hour', 'about {count} hours', @_);
     },
 
     about_x_months => sub {
-      "about $_[0]", $pluralize->('month', $_[0])
+      $nx->('about {count} month', 'about {count} months', @_);
     },
 
     about_x_years => sub {
-      "about $_[0]", $pluralize->('year', $_[0])
+      $nx->('about {count} year', 'about {count} years', @_);
     },
 
     almost_x_years => sub {
-      "almost $_[0]", $pluralize->('year', $_[0])
+      $nx->('almost {count} year', 'almost {count} years', @_);
     },
 
-    half_a_minute => sub { 'half a minute' },
+    half_a_minute => sub { __ 'half a minute' },
 
     less_than_x_minutes => sub {
-      $_[0] == 1 ? 'less than a minute' : "less than $_[0] minutes";
+      $nx->('less than a minute', 'less than {count} minutes', @_);
     },
 
     less_than_x_seconds => sub {
-      "less than $_[0]", $pluralize->('second', $_[0]) 
+      $nx->('less than {count} second', 'less than {count} seconds', @_);
     },
 
     over_x_years => sub {
-      "over $_[0]", $pluralize->('year', $_[0]) 
+      $nx->('over {count} year', 'over {count} years', @_);
     },
 
     x_days => sub {
-      $_[0], $pluralize->('day', $_[0])
+      $nx->('{count} day', '{count} days', @_);
     },
 
     x_minutes => sub {
-      $_[0], $pluralize->('minute', $_[0])
+      $nx->('{count} minute', '{count} minutes', @_);
     },
 
     x_months => sub {
-      $_[0], $pluralize->('month', $_[0])
+      $nx->('{count} month', '{count} months', @_);
     },
   );
 
-  my $en_locale = sub {
-    my $string_id = shift;
-    my %args = @_;
-
-    my $sub = $en{ $string_id }
-      or croak "unknown locale string id '$string_id' for english";
-    return join ' ', $sub->($args{count});
-  };
-
-  sub locale {
+  sub _locale {
     my $self = shift;
 
-    return $en_locale unless blessed $self;
+    return sub {
+      my $string_id = shift or croak 'no string id supplied';
 
-    $self->{locale} = shift || $en_locale if @_;
-    return $self->{locale} || $en_locale;
+      my $sub = $locale{ $string_id }
+        or croak "unknown locale string_id '$string_id'";
+      return join ' ', $sub->(@_);
+    };
   }
 }
 
@@ -124,7 +119,7 @@ sub in_words {
   my $mins = $round->($duration / 60);
   my $secs = $round->($duration);
 
-  my $locale = $args{locale} || $self->locale;
+  my $locale = $self->_locale;
 
   if ($mins <= 1) {
     unless ($args{include_seconds}) {
