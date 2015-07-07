@@ -11,7 +11,7 @@ version 0.06
     use Time::Ago;
 
     print Time::Ago->in_words(0), "\n";
-    # 0 seconds ago, prints "less than 1 minute";
+    # 0 seconds ago, prints "less than a minute";
 
     print Time::Ago->in_words(3600 * 4.6), "\n";
     # 16,560 seconds ago, prints "about 5 hours";
@@ -97,7 +97,7 @@ Ruby on Rails DateHelper
 
 Github repository [https://github.com/mla/time-ago](https://github.com/mla/time-ago)
 
-[Time::Duration](https://metacpan.org/pod/Time::Duration)
+[Time::Duration](https://metacpan.org/pod/Time::Duration), [DateTime::Format::Human::Duration](https://metacpan.org/pod/DateTime::Format::Human::Duration)
 
 # AUTHOR
 
