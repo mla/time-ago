@@ -286,6 +286,6 @@ L<http://apidock.com/rails/v4.2.1/ActionView/Helpers/DateHelper/distance_of_time
 
 Github repository L<https://github.com/mla/time-ago>
 
-L<Time::Duration>
+L<Time::Duration>, L<DateTime::Format::Human::Duration>
 
 =cut 
