@@ -110,6 +110,13 @@ sub in_words {
   if (blessed $duration) {
     if ($duration->can('epoch')) {
       $duration = time - $duration->epoch;
+    } elsif ($duration->can('delta_months')) { # DateTime::Duration-like
+      # yes, we're treating every month as 30 days
+      $duration = ($duration->delta_months  * 86400 * 30) +
+                  ($duration->delta_days    * 86400) +
+                  ($duration->delta_minutes * 60)    +
+                  $duration->delta_seconds
+      ;
     }
   }
 
