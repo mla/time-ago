@@ -35,54 +35,52 @@ sub new {
 
 
 {
-  # Just a wrapper around __nx to simplify calls
-  my $nx = sub {
-    my ($singular, $plural, %args) = @_;
-
-    __nx($singular, $plural, $args{count}, %args);
-  };
-
   my %locale = (
     about_x_hours => sub {
-      $nx->('about {count} hour', 'about {count} hours', @_);
+      __nx('about {count} hour', 'about {count} hours', $_, count => $_);
     },
 
     about_x_months => sub {
-      $nx->('about {count} month', 'about {count} months', @_);
+      __nx('about {count} month', 'about {count} months', $_, count => $_);
     },
 
     about_x_years => sub {
-      $nx->('about {count} year', 'about {count} years', @_);
+      __nx('about {count} year', 'about {count} years', $_, count => $_);
     },
 
     almost_x_years => sub {
-      $nx->('almost {count} year', 'almost {count} years', @_);
+      __nx('almost {count} year', 'almost {count} years', $_, count => $_);
     },
 
     half_a_minute => sub { __ 'half a minute' },
 
     less_than_x_minutes => sub {
-      $nx->('less than a minute', 'less than {count} minutes', @_);
+      __nx('less than a minute', 'less than {count} minutes', $_, count => $_);
     },
 
     less_than_x_seconds => sub {
-      $nx->('less than {count} second', 'less than {count} seconds', @_);
+      __nx(
+        'less than {count} second',
+        'less than {count} seconds',
+        $_,
+        count => $_,
+      );
     },
 
     over_x_years => sub {
-      $nx->('over {count} year', 'over {count} years', @_);
+      __nx('over {count} year', 'over {count} years', $_, count => $_);
     },
 
     x_days => sub {
-      $nx->('{count} day', '{count} days', @_);
+      __nx('{count} day', '{count} days', $_, count => $_);
     },
 
     x_minutes => sub {
-      $nx->('{count} minute', '{count} minutes', @_);
+      __nx('{count} minute', '{count} minutes', $_, count => $_);
     },
 
     x_months => sub {
-      $nx->('{count} month', '{count} months', @_);
+      __nx('{count} month', '{count} months', $_, count => $_);
     },
   );
 
@@ -91,10 +89,13 @@ sub new {
 
     return sub {
       my $string_id = shift or croak 'no string id supplied';
+      my %args = @_;
 
       my $sub = $locale{ $string_id }
         or croak "unknown locale string_id '$string_id'";
-      return join ' ', $sub->(@_);
+
+      local $_ = $args{count};
+      return $sub->();
     };
   }
 }
