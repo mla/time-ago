@@ -7,10 +7,17 @@ package Time::Ago;
 use strict;
 use warnings;
 use Carp;
-use Locale::TextDomain;
+use Encode;
+use Locale::Messages qw/ bind_textdomain_filter /;
+use Locale::TextDomain 'Time-Ago';
 use Scalar::Util qw/ blessed /;
 
 our $VERSION = '0.06';
+
+BEGIN {
+  $ENV{OUTPUT_CHARSET} = 'UTF-8';
+  bind_textdomain_filter 'Time-Ago' => \&Encode::decode_utf8;
+}
 
 use constant {
   MINUTES_IN_QUARTER_YEAR        => 131400, # 91.25 days
@@ -52,7 +59,7 @@ sub new {
       __nx('almost {count} year', 'almost {count} years', $_, count => $_);
     },
 
-    half_a_minute => sub { __ 'half a minute' },
+    half_a_minute => sub { __('half a minute') },
 
     less_than_x_minutes => sub {
       __nx('less than a minute', 'less than {count} minutes', $_, count => $_);
