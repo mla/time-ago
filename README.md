@@ -4,17 +4,23 @@ Time::Ago - Approximate duration in words
 
 # VERSION
 
-version 0.06
+version 0.07
 
 # SYNOPSIS
 
     use Time::Ago;
 
     print Time::Ago->in_words(0), "\n";
-    # 0 seconds ago, prints "less than a minute";
+    # prints "less than a minute"
 
     print Time::Ago->in_words(3600 * 4.6), "\n";
-    # 16,560 seconds ago, prints "about 5 hours";
+    # prints "about 5 hours"
+    
+    print Time::Ago->in_words(86400 * 360 * 2), "\n";
+    # prints "almost 2 years"
+    
+    print Time::Ago->in_words(86400 * 365 * 11.3), "\n";
+    # prints "over 11 years"
 
 # DESCRIPTION
 
@@ -78,11 +84,58 @@ From Rails' docs:
     (as provided by Time::Piece or DateTime), the current time minus the
     object's epoch() seconds is used.
 
-# BUGS
+    Passing the duration as a DateTime::Duration instance is also supported.
 
-There is some rudimentary locale support but currently only English is
-implemented. It should be changed to use a real locale package, but not
-sure what a good Perl module is for that currently.
+    If an include\_seconds parameter is supplied, durations under one minute
+    generate more granular phrases:
+
+        foreach (4, 9, 19, 39, 59) {
+          print Time::Ago->in_words($_, include_seconds => 1), "\n";
+        }
+
+        # less than 5 seconds
+        # less than 10 seconds
+        # less than 20 seconds
+        # half a minute
+        # less than a minute
+
+# LOCALIZATION
+
+Locale::TextDomain is used for localization. Translations were taken
+from the Ruby i18n library.
+
+Currently English, French, German, Italian, Japanese, Russian, and Spanish
+translations are available. Contact me if you need another language.
+
+See [Locale::TextDomain](https://metacpan.org/pod/Locale::TextDomain) for how to specify a language.
+
+    #!/usr/bin/env perl
+    
+    use strict;
+    use warnings;
+    use open qw/ :std :utf8 /;
+    use POSIX ':locale_h';
+    use Time::Ago;
+    
+    my $secs = 86400 * 365 * 10.4;
+    
+    foreach (qw/ en fr de it ja ru es /) {
+      setlocale(LC_ALL, '');
+      $ENV{LANGUAGE} = $_;
+      print Time::Ago->in_words(86400 * 365 * 10.4), "\n";
+    }
+
+Output:
+
+    over 10 years
+    plus de 10 ans
+    vor mehr als 10 Jahren
+    oltre 10 anni
+    10年以上
+    больше 10 лет
+    más de 10 años
+
+# BUGS
 
 The rails' implementation includes logic for leap years depending on the
 parameters supplied. We have no equivalent support although it would be
@@ -93,11 +146,14 @@ simple to add if anyone cares.
 Ruby on Rails DateHelper
 [http://apidock.com/rails/v4.2.1/ActionView/Helpers/DateHelper/distance\_of\_time\_in\_words](http://apidock.com/rails/v4.2.1/ActionView/Helpers/DateHelper/distance_of_time_in_words)
 
+Ruby I18N library
+[https://github.com/svenfuchs/i18n](https://github.com/svenfuchs/i18n)
+
 # SEE ALSO
 
 Github repository [https://github.com/mla/time-ago](https://github.com/mla/time-ago)
 
-[Time::Duration](https://metacpan.org/pod/Time::Duration), [DateTime::Format::Human::Duration](https://metacpan.org/pod/DateTime::Format::Human::Duration)
+[Time::Duration](https://metacpan.org/pod/Time::Duration), [DateTime::Format::Human::Duration](https://metacpan.org/pod/DateTime::Format::Human::Duration), [Locale::TextDomain](https://metacpan.org/pod/Locale::TextDomain)
 
 # AUTHOR
 
