@@ -278,12 +278,6 @@ From Rails' docs:
 
 Given a duration, in seconds, returns a readable approximation in words.
 
-As a convenience, if the duration is an object with an epoch() interface
-(as provided by Time::Piece or DateTime), the current time minus the
-object's epoch() seconds is used.
-
-Passing the duration as a DateTime::Duration instance is also supported.
-
 If an include_seconds parameter is supplied, durations under one minute
 generate more granular phrases:
 
@@ -296,6 +290,12 @@ generate more granular phrases:
   # less than 20 seconds
   # half a minute
   # less than a minute
+
+As a convenience, if the duration is an object with an epoch() interface
+(as provided by Time::Piece or DateTime), the current time minus the
+object's epoch() seconds is used.
+
+Passing the duration as a DateTime::Duration instance is also supported.
 
 =back
 
@@ -337,16 +337,15 @@ Output:
 
 =head1 BUGS
 
-The rails' implementation includes logic for leap years depending on the
-parameters supplied. We have no equivalent support although it would be
-simple to add if anyone cares.
+The rails' implementation includes some logic for leap years that is not
+implemented here.
 
 =head1 CREDITS
 
 Ruby on Rails DateHelper
 L<http://apidock.com/rails/v4.2.1/ActionView/Helpers/DateHelper/distance_of_time_in_words>
 
-Ruby I18N library
+Ruby i18n library
 L<https://github.com/svenfuchs/i18n>
 
 =head1 SEE ALSO
