@@ -1,5 +1,7 @@
 #!/bin/bash
 
+# There's a plugin for this but not sure how to append travis code 
+
 readme=README.md
 
 set -e

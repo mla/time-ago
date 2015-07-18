@@ -275,11 +275,44 @@ object's epoch() seconds is used.
 
 =back
 
-=head1 BUGS
+=head1 LOCALIZATION
 
-There is some rudimentary locale support but currently only English is
-implemented. It should be changed to use a real locale package, but not
-sure what a good Perl module is for that currently.
+Locale::TextDomain is used for localization. Translations were taken
+from the Ruby i18n project.
+
+Currently English, French, German, Italian, Japanese, Russian, and Spanish
+translations are available. Contact me if you need another language.
+
+See L<Locale::TextDomain> for how to specify a language.
+
+  #!/usr/bin/env perl
+  
+  use strict;
+  use warnings;
+  use open qw/ :std :utf8 /;
+  use POSIX ':locale_h';
+  use Time::Ago;
+  
+  my $secs = 86400 * 365 * 10.4;
+  
+  foreach (qw/ en fr de it ja ru es /) {
+    setlocale(LC_ALL, '');
+    $ENV{LANGUAGE} = $_;
+    print Time::Ago->in_words(86400 * 365 * 10.4), "\n";
+  }
+
+Output:
+
+  over 10 years
+  plus de 10 ans
+  vor mehr als 10 Jahren
+  oltre 10 anni
+  over 10 years
+  больше 10 лет
+  más de 10 años
+
+
+=head1 BUGS
 
 The rails' implementation includes logic for leap years depending on the
 parameters supplied. We have no equivalent support although it would be
@@ -294,6 +327,6 @@ L<http://apidock.com/rails/v4.2.1/ActionView/Helpers/DateHelper/distance_of_time
 
 Github repository L<https://github.com/mla/time-ago>
 
-L<Time::Duration>, L<DateTime::Format::Human::Duration>
+L<Time::Duration>, L<DateTime::Format::Human::Duration>, L<Locale::TextDomain>
 
 =cut 
