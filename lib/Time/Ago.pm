@@ -6,6 +6,7 @@ package Time::Ago;
 
 use strict;
 use warnings;
+use utf8;
 use Carp;
 use Encode;
 use Locale::Messages qw/ bind_textdomain_filter /;
@@ -116,11 +117,11 @@ sub in_words {
   my $duration = $args{duration}; 
 
   if (blessed $duration) {
-    if ($duration->can('epoch')) {
+    if ($duration->can('epoch')) { # DateTime/Time::Piece-like object
       $duration = time - $duration->epoch;
     } elsif ($duration->can('delta_months')) { # DateTime::Duration-like
-      # yes, we're treating every month as 30 days
-      $duration = ($duration->delta_months  * 86400 * 30) +
+      # yes, we're treating every month as 30.41 days
+      $duration = ($duration->delta_months  * (86400 * 365 / 12)) +
                   ($duration->delta_days    * 86400) +
                   ($duration->delta_minutes * 60)    +
                   $duration->delta_seconds
@@ -199,15 +200,23 @@ __END__
 
 =pod
 
+=encoding utf8
+
 =head1 SYNOPSIS
 
   use Time::Ago;
 
   print Time::Ago->in_words(0), "\n";
-  # 0 seconds ago, prints "less than a minute";
+  # prints "less than a minute"
 
   print Time::Ago->in_words(3600 * 4.6), "\n";
-  # 16,560 seconds ago, prints "about 5 hours";
+  # prints "about 5 hours"
+  
+  print Time::Ago->in_words(86400 * 360 * 2), "\n";
+  # prints "almost 2 years"
+  
+  print Time::Ago->in_words(86400 * 365 * 11.3), "\n";
+  # prints "over 11 years"
   
 =head1 DESCRIPTION
 
@@ -273,12 +282,27 @@ As a convenience, if the duration is an object with an epoch() interface
 (as provided by Time::Piece or DateTime), the current time minus the
 object's epoch() seconds is used.
 
+Passing the duration as a DateTime::Duration instance is also supported.
+
+If an include_seconds parameter is supplied, durations under one minute
+generate more granular phrases:
+
+  foreach (4, 9, 19, 39, 59) {
+    print Time::Ago->in_words($_, include_seconds => 1), "\n";
+  }
+
+  # less than 5 seconds
+  # less than 10 seconds
+  # less than 20 seconds
+  # half a minute
+  # less than a minute
+
 =back
 
 =head1 LOCALIZATION
 
 Locale::TextDomain is used for localization. Translations were taken
-from the Ruby i18n project.
+from the Ruby i18n library.
 
 Currently English, French, German, Italian, Japanese, Russian, and Spanish
 translations are available. Contact me if you need another language.
@@ -307,10 +331,9 @@ Output:
   plus de 10 ans
   vor mehr als 10 Jahren
   oltre 10 anni
-  over 10 years
+  10年以上
   больше 10 лет
   más de 10 años
-
 
 =head1 BUGS
 
@@ -322,6 +345,9 @@ simple to add if anyone cares.
 
 Ruby on Rails DateHelper
 L<http://apidock.com/rails/v4.2.1/ActionView/Helpers/DateHelper/distance_of_time_in_words>
+
+Ruby I18N library
+L<https://github.com/svenfuchs/i18n>
 
 =head1 SEE ALSO
 

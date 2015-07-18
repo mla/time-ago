@@ -139,6 +139,21 @@ SKIP: {
 
 #######################################################################
 
+SKIP: {
+  eval { require DateTime::Duration };
+  skip 'DateTime::Duration not installed', 1 if $@;
+
+  my $dur = DateTime::Duration->new(
+    years  => 3,
+    months => 10,
+  );
+
+  is $call->($dur), 'almost 4 years',
+    'DateTime::Duration object converted to epoch seconds';
+}
+
+#######################################################################
+
 # Tests for when include_seconds parameter is supplied
 
 $call = sub { $CLASS->$method(@_, include_seconds => 1) };
