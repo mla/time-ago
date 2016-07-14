@@ -304,7 +304,7 @@ Passing the duration as a DateTime::Duration instance is also supported.
 Locale::TextDomain is used for localization. Translations were taken
 from the Ruby i18n library.
 
-Currently English, French, German, Italian, Japanese, Russian, and Spanish
+Currently Arabic, English, French, German, Italian, Japanese, Russian, and Spanish
 translations are available. Contact me if you need another language.
 
 See L<Locale::TextDomain> for how to specify a language.
