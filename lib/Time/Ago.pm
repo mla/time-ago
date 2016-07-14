@@ -322,7 +322,7 @@ See L<Locale::TextDomain> for how to specify a language.
   foreach (qw/ en fr de it ja ru es /) {
     setlocale(LC_ALL, '');
     $ENV{LANGUAGE} = $_;
-    print Time::Ago->in_words(86400 * 365 * 10.4), "\n";
+    print Time::Ago->in_words($secs), "\n";
   }
 
 Output:
