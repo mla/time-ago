@@ -101,8 +101,7 @@ From Rails' docs:
 
 # LOCALIZATION
 
-Locale::TextDomain is used for localization. Initial ranslations were taken
-from the Ruby i18n library.
+Locale::TextDomain is used for localization.
 
 Currently Arabic, English, French, German, Italian, Japanese, Russian,
 and Spanish translations are available. Contact me if you need another
