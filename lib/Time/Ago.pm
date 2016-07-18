@@ -13,7 +13,7 @@ use Locale::Messages qw/ bind_textdomain_filter /;
 use Locale::TextDomain 'Time-Ago';
 use Scalar::Util qw/ blessed /;
 
-our $VERSION = '0.07';
+our $VERSION = '0.08';
 
 BEGIN {
   $ENV{OUTPUT_CHARSET} = 'UTF-8';
