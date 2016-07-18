@@ -15,12 +15,11 @@ isa_ok $CLASS->new, $CLASS, 'constructor';
 #######################################################################
 
 sub to_secs {
-  my @units = @_;
+  my $secs = @_ ? shift() : 0;
 
-  my $secs = shift || 0;
-  $secs    += (shift() * 60)           if @_; # minutes
-  $secs    += (shift() * 60 * 60)      if @_; # hours
-  $secs    += (shift() * 60 * 60 * 24) if @_; # days
+  $secs += (shift() * 60)           if @_; # minutes
+  $secs += (shift() * 60 * 60)      if @_; # hours
+  $secs += (shift() * 60 * 60 * 24) if @_; # days
 
   return $secs;
 }
