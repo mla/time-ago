@@ -301,11 +301,12 @@ Passing the duration as a DateTime::Duration instance is also supported.
 
 =head1 LOCALIZATION
 
-Locale::TextDomain is used for localization. Translations were taken
+Locale::TextDomain is used for localization. Initial ranslations were taken
 from the Ruby i18n library.
 
-Currently Arabic, English, French, German, Italian, Japanese, Russian, and Spanish
-translations are available. Contact me if you need another language.
+Currently Arabic, English, French, German, Italian, Japanese, Russian,
+and Spanish translations are available. Contact me if you need another
+language.
 
 See L<Locale::TextDomain> for how to specify a language.
 

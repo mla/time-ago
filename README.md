@@ -101,11 +101,12 @@ From Rails' docs:
 
 # LOCALIZATION
 
-Locale::TextDomain is used for localization. Translations were taken
+Locale::TextDomain is used for localization. Initial ranslations were taken
 from the Ruby i18n library.
 
-Currently English, French, German, Italian, Japanese, Russian, and Spanish
-translations are available. Contact me if you need another language.
+Currently Arabic, English, French, German, Italian, Japanese, Russian,
+and Spanish translations are available. Contact me if you need another
+language.
 
 See [Locale::TextDomain](https://metacpan.org/pod/Locale::TextDomain) for how to specify a language.
 
@@ -122,7 +123,7 @@ See [Locale::TextDomain](https://metacpan.org/pod/Locale::TextDomain) for how to
     foreach (qw/ en fr de it ja ru es /) {
       setlocale(LC_ALL, '');
       $ENV{LANGUAGE} = $_;
-      print Time::Ago->in_words(86400 * 365 * 10.4), "\n";
+      print Time::Ago->in_words($secs), "\n";
     }
 
 Output:
