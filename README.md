@@ -4,7 +4,7 @@ Time::Ago - Approximate duration in words
 
 # VERSION
 
-version 0.07
+version 0.08
 
 # SYNOPSIS
 
