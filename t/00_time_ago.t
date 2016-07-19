@@ -2,6 +2,7 @@
 
 use strict;
 use warnings;
+use POSIX ':locale_h';
 use Test::More;
 
 my $CLASS = 'Time::Ago';
@@ -10,7 +11,8 @@ use_ok $CLASS;
 
 isa_ok $CLASS->new, $CLASS, 'constructor';
 
-
+setlocale(LC_ALL, '');
+$ENV{LANGUAGE} = 'en';
 
 #######################################################################
 
