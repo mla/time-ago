@@ -13,7 +13,7 @@ use Locale::Messages qw/ bind_textdomain_filter /;
 use Locale::TextDomain 'Time-Ago';
 use Scalar::Util qw/ blessed /;
 
-our $VERSION = '0.07';
+our $VERSION = '0.08';
 
 BEGIN {
   $ENV{OUTPUT_CHARSET} = 'UTF-8';
@@ -301,11 +301,11 @@ Passing the duration as a DateTime::Duration instance is also supported.
 
 =head1 LOCALIZATION
 
-Locale::TextDomain is used for localization. Translations were taken
-from the Ruby i18n library.
+Locale::TextDomain is used for localization.
 
-Currently Arabic, English, French, German, Italian, Japanese, Russian, and Spanish
-translations are available. Contact me if you need another language.
+Currently Arabic, English, French, German, Italian, Japanese, Russian,
+and Spanish translations are available. Contact me if you need another
+language.
 
 See L<Locale::TextDomain> for how to specify a language.
 
