@@ -103,7 +103,7 @@ From Rails' docs:
 
 Locale::TextDomain is used for localization.
 
-Currently Arabic, English, French, German, Italian, Japanese, Russian,
+Currently Arabic, Dutch, English, French, German, Italian, Japanese, Russian,
 and Spanish translations are available. Contact me if you need another
 language.
 

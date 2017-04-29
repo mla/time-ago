@@ -10,6 +10,6 @@ install:
   - dzil listdeps | grep -ve '^\W' | cpanm  --quiet   --notest  --skip-installed
 language: perl
 perl:
-  - 5.18
+  - '5.18'
 script:
   - dzil smoke --release --author
