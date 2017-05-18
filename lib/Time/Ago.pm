@@ -13,7 +13,7 @@ use Locale::Messages qw/ bind_textdomain_filter /;
 use Locale::TextDomain 'Time-Ago';
 use Scalar::Util qw/ blessed /;
 
-our $VERSION = '0.09';
+our $VERSION = '1.00';
 
 BEGIN {
   $ENV{OUTPUT_CHARSET} = 'UTF-8';
@@ -303,7 +303,7 @@ Passing the duration as a DateTime::Duration instance is also supported.
 
 Locale::TextDomain is used for localization.
 
-Currently Arabic, English, French, German, Italian, Japanese, Russian,
+Currently Arabic, Dutch, English, French, German, Italian, Japanese, Russian,
 and Spanish translations are available. Contact me if you need another
 language.
 
